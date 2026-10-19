@@ -125,6 +125,8 @@ code, pre { font-family: var(--font-mono); }
   padding: 8px 12px; border-radius: 10px; transition: color 0.2s, background 0.2s;
 }
 .nav-links a:hover, .nav-links a.active { color: var(--text-strong); background: rgba(126, 196, 255, 0.08); }
+.nav-links a.nav-gh { display: inline-flex; align-items: center; gap: 7px; }
+.nav-gh svg { width: 17px; height: 17px; flex: none; }
 .nav-links a.btn-primary, .nav-links a.btn-primary:hover { color: #021024; background: linear-gradient(135deg, var(--cyan), var(--azure) 55%, var(--blue)); margin-left: 8px; }
 
 .nav-toggle {
@@ -690,6 +692,9 @@ td code { white-space: normal !important; }
     background: rgba(126, 196, 255, 0.06); border: 1px solid var(--border-strong); border-radius: 10px; padding: 9px 14px; cursor: pointer;
   }
   .sidebar-toggle svg { width: 16px; height: 16px; }
+  .nav-gh span { display: none; }
+  .nav .container { gap: 16px; }
+  .nav-links a { padding: 8px 9px; white-space: nowrap; }
 }
 
 @media (max-width: 760px) {
@@ -704,6 +709,7 @@ td code { white-space: normal !important; }
   .nav.open .nav-links { opacity: 1; transform: none; pointer-events: auto; }
   .nav.open { background: rgba(3, 14, 32, 0.97); }
   .nav-links a { padding: 12px 14px; }
+  .nav-gh span { display: inline; }
   .nav-links .btn { justify-content: center; margin-top: 8px; }
   .section { padding: 80px 0; }
   .features, .bench { grid-template-columns: minmax(0, 1fr); }
