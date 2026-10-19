@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Marlin — one codebase for CPU and GPU</title>
+  <meta name="description" content="Marlin is a compiled programming language built on MLIR and LLVM. Write one readable program and run it on every CPU core and on the GPU — with tasks, parallel loops, an HTTP server and database drivers built in.">
+  <meta name="theme-color" content="#041530">
+  <meta property="og:title" content="Marlin — one codebase for CPU and GPU">
+  <meta property="og:description" content="A compiled language built on MLIR and LLVM: tasks, parallel loops and GPU functions from a single readable source.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="nav" id="top">
+    <div class="container">
+      <a class="brand" href="index.html" aria-label="Marlin home"><span data-fish="brand"></span>marlin</a>
+      <button class="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav-links"><span></span></button>
+      <nav class="nav-links" id="nav-links" aria-label="Main">
+        <a href="#features">Features</a>
+        <a href="#examples">Examples</a>
+        <a href="#how">How it works</a>
+        <a href="#performance">Performance</a>
+        <a href="docs.html">Docs</a>
+        <a class="btn btn-primary btn-sm" href="downloads.html">Download</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ================= Hero ================= -->
+    <section class="hero" aria-labelledby="hero-title">
+      <canvas class="ocean" aria-hidden="true"></canvas>
+      <div class="rays" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+      <div class="school" aria-hidden="true"></div>
+      <div class="hero-fish" aria-hidden="true">
+        <div class="streaks"><i></i><i></i><i></i><i></i></div>
+      </div>
+
+      <div class="hero-content">
+        <span class="eyebrow"><span class="dot"></span>Built on MLIR &amp; LLVM</span>
+        <h1 id="hero-title">Marlin</h1>
+        <p class="tagline">Write it once. Run it on <em>every CPU core</em> and the <em>GPU</em>.</p>
+        <p class="lede">A fast, compiled language with a calm, readable syntax. Tasks, parallel loops and GPU functions are part of the language, so the same source runs on your CPU and your graphics card.</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="downloads.html">Download Marlin
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="btn btn-ghost" href="docs.html">Read the docs</a>
+        </div>
+        <div class="hero-install">
+          <span class="prompt" data-os-text-windows="PS&gt;">$</span>
+          <code id="hero-cmd" data-os-text-windows="irm https://github.com/MehmetEminKaymaz/marlin/releases/latest/download/install.ps1 | iex">curl -fsSL https://github.com/MehmetEminKaymaz/marlin/releases/latest/download/install.sh | sh</code>
+          <button class="copy" data-copy="#hero-cmd" type="button">Copy</button>
+        </div>
+      </div>
+
+      <div class="scroll-hint" aria-hidden="true"></div>
+
+      <div class="waves" aria-hidden="true">
+        <svg class="w1" viewBox="0 0 2880 120" preserveAspectRatio="none"><path fill="#0b3a73" d="M0 60 C240 20 480 100 720 60 S1200 20 1440 60 S1920 100 2160 60 S2640 20 2880 60 V120 H0 Z"/></svg>
+        <svg class="w2" viewBox="0 0 2880 120" preserveAspectRatio="none"><path fill="#06214a" d="M0 76 C240 40 480 110 720 76 S1200 40 1440 76 S1920 110 2160 76 S2640 40 2880 76 V120 H0 Z"/></svg>
+        <svg class="w3" viewBox="0 0 2880 120" preserveAspectRatio="none"><path fill="#020a17" d="M0 92 C240 70 480 116 720 92 S1200 70 1440 92 S1920 116 2160 92 S2640 70 2880 92 V120 H0 Z"/></svg>
+      </div>
+    </section>
+
+    <!-- ================= Stats ================= -->
+    <div class="container">
+      <div class="stats reveal">
+        <div class="stat"><strong>1 source</strong><span>for CPU and GPU</span></div>
+        <div class="stat"><strong>Native</strong><span>on Linux, macOS &amp; Windows</span></div>
+        <div class="stat"><strong>MLIR 19</strong><span>under the hood</span></div>
+        <div class="stat"><strong>0 data races</strong><span>in accepted parallel loops</span></div>
+      </div>
+    </div>
+
+    <!-- ================= Features ================= -->
+    <section class="section" id="features">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="kicker">Why Marlin</span>
+          <h2>Speed you can read</h2>
+          <p>Marlin keeps the syntax small and moves the hard parts into the compiler: scheduling, GPU kernels, memory and safety checks.</p>
+        </div>
+
+        <div class="features">
+          <article class="card reveal" data-delay="1">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/></svg></div>
+            <h3>GPU with one word</h3>
+            <p>Put <code>@GPU</code> above a function. Matrix maths and parallel loops inside it become GPU kernels for NVIDIA, AMD, Intel and Apple graphics; without a GPU the same code runs on the CPU.</p>
+            <div class="snippet">@GPU func relax(...) -&gt; matrix&lt;float64&gt;</div>
+          </article>
+
+          <article class="card reveal" data-delay="2">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="8" cy="6" r="1.6" fill="currentColor"/><circle cx="14" cy="12" r="1.6" fill="currentColor"/><circle cx="10" cy="18" r="1.6" fill="currentColor"/></svg></div>
+            <h3>Lightweight tasks</h3>
+            <p><code>marl f(x)</code> starts a task, <code>await(t)</code> takes its result. Waiting never blocks a thread, so thousands of tasks can be in flight.</p>
+            <div class="snippet">task&lt;int64&gt; t = marl fib(32);</div>
+          </article>
+
+          <article class="card reveal" data-delay="3">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></div>
+            <h3>Parallel loops, checked</h3>
+            <p><code>parallel for</code> spreads iterations over every core. The compiler rejects loops that could race, so the ones it accepts are correct.</p>
+            <div class="snippet">parallel for i in 0 .. n { v[i] = f(i); }</div>
+          </article>
+
+          <article class="card reveal" data-delay="1">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.8 3 2.8 15 0 18M12 3c-2.8 3-2.8 15 0 18"/></svg></div>
+            <h3>Web server included</h3>
+            <p><code>std.http</code> ships an HTTP/1.1 server with routing, query and form helpers. One call serves every request in its own task.</p>
+            <div class="snippet">http.serve_concurrent(8080, routes);</div>
+          </article>
+
+          <article class="card reveal" data-delay="2">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5.5" rx="8" ry="3"/><path d="M4 5.5v13c0 1.7 3.6 3 8 3s8-1.3 8-3v-13"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg></div>
+            <h3>PostgreSQL &amp; SQLite</h3>
+            <p>Parameterised queries, transactions and connection pools. <code>scan</code> fills a list of structs straight from the result rows.</p>
+            <div class="snippet">list&lt;User&gt; users = scan(r.rows);</div>
+          </article>
+
+          <article class="card reveal" data-delay="3">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5M13.5 4l-3 16"/></svg></div>
+            <h3>Matrices built in</h3>
+            <p><code>matrix&lt;T, N&gt;</code> is a first-class type. <code>a + b * 2 - c</code> runs as one fused loop and <code>matmul</code> is tiled for speed.</p>
+            <div class="snippet">matrix&lt;float&gt; d = matmul(a, b);</div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= Examples ================= -->
+    <section class="section depth-2" id="examples">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="kicker">Examples</span>
+          <h2>Real programs, real output</h2>
+          <p>Every example below was compiled with <code>marlin -O2</code> and run. The output is exactly what it printed.</p>
+        </div>
+
+        <div class="examples reveal" data-tabs>
+          <div class="tab-list" role="tablist" aria-label="Examples" aria-orientation="vertical">
+            <button class="tab" role="tab" id="t-basics" aria-controls="p-basics" aria-selected="true" tabindex="0"><strong>The basics</strong><span>Structs, lists, lambdas</span></button>
+            <button class="tab" role="tab" id="t-tasks" aria-controls="p-tasks" aria-selected="false" tabindex="-1"><strong>Tasks</strong><span>marl, task&lt;T&gt;, await</span></button>
+            <button class="tab" role="tab" id="t-par" aria-controls="p-par" aria-selected="false" tabindex="-1"><strong>Parallel loops</strong><span>All cores, no races</span></button>
+            <button class="tab" role="tab" id="t-gpu" aria-controls="p-gpu" aria-selected="false" tabindex="-1"><strong>GPU</strong><span>@GPU functions</span></button>
+            <button class="tab" role="tab" id="t-http" aria-controls="p-http" aria-selected="false" tabindex="-1"><strong>HTTP server</strong><span>std.http</span></button>
+            <button class="tab" role="tab" id="t-db" aria-controls="p-db" aria-selected="false" tabindex="-1"><strong>Database</strong><span>std.sqlite + scan</span></button>
+          </div>
+
+          <div class="tab-panel" role="tabpanel" id="p-basics" aria-labelledby="t-basics">
+            <div class="code-window">
+              <div class="code-bar"><span class="lights"><i></i><i></i><i></i></span><span class="file">basics.marl</span><button class="copy" type="button">Copy</button></div>
+<pre class="code"><code class="marl">
+struct Point {
+    float64 x;
+    float64 y;
+}
+
+func length(Point p) -&gt; float64 {
+    return sqrt(p.x * p.x + p.y * p.y);
+}
+
+func main() -&gt; void {
+    list&lt;Point&gt; points = [Point(3, 4), Point(6, 8)];
+    let square = (int n) -&gt; int | n * n;
+    for p in points {
+        print("length:", length(p));
+    }
+    print("square(7) =", square(7));
+    free(points);
+}
+</code></pre>
+              <div class="output"><span class="label">Output</span><pre>length: 5.0
+length: 10.0
+square(7) = 49</pre></div>
+            </div>
+          </div>
+
+          <div class="tab-panel" role="tabpanel" id="p-tasks" aria-labelledby="t-tasks" hidden>
+            <div class="code-window">
+              <div class="code-bar"><span class="lights"><i></i><i></i><i></i></span><span class="file">tasks.marl</span><button class="copy" type="button">Copy</button></div>
+<pre class="code"><code class="marl">
+// Split the work, run it on every core.
+func fib(int n) -&gt; int64 {
+    if n &lt; 25 {
+        return fib_seq(n);
+    }
+    task&lt;int64&gt; left = marl fib(n - 1);   // a new task
+    int64 right = fib(n - 2);            // keep working here
+    return await(left) + right;
+}
+
+func fib_seq(int n) -&gt; int64 {
+    if n &lt; 2 {
+        return n;
+    }
+    return fib_seq(n - 1) + fib_seq(n - 2);
+}
+
+func main() -&gt; void {
+    task&lt;int64&gt; t = marl fib(32);
+    print("fib(32) =", await(t));
+}
+</code></pre>
+              <div class="output"><span class="label">Output</span><pre>fib(32) = 2178309</pre></div>
+            </div>
+          </div>
+
+          <div class="tab-panel" role="tabpanel" id="p-par" aria-labelledby="t-par" hidden>
+            <div class="code-window">
+              <div class="code-bar"><span class="lights"><i></i><i></i><i></i></span><span class="file">parallel.marl</span><button class="copy" type="button">Copy</button></div>
+<pre class="code"><code class="marl">
+// Iterations are spread over all cores.
+// The compiler rejects loops that could race.
+func main() -&gt; void {
+    int64 n = 10000000;
+    matrix&lt;float64, 1&gt; v = zeros(n);
+    parallel for i in 0 .. n {
+        v[i] = sqrt(i * 1.0);     // each iteration writes only v[i]
+    }
+    print("sum of roots:", sum(v));
+}
+</code></pre>
+              <div class="output"><span class="label">Output</span><pre>sum of roots: 21081849486.439312</pre></div>
+            </div>
+          </div>
+
+          <div class="tab-panel" role="tabpanel" id="p-gpu" aria-labelledby="t-gpu" hidden>
+            <div class="code-window">
+              <div class="code-bar"><span class="lights"><i></i><i></i><i></i></span><span class="file">gpu.marl</span><button class="copy" type="button">Copy</button></div>
+<pre class="code"><code class="marl">
+// One annotation moves a function to the GPU.
+@GPU
+func relax(matrix&lt;float64&gt; a, matrix&lt;float64&gt; b, int n) -&gt; matrix&lt;float64&gt; {
+    matrix&lt;float64&gt; x = a;
+    for k in 0 .. n {
+        x = x * 0.5 + b;          // runs as a GPU kernel
+    }
+    return x;
+}
+
+func main() -&gt; void {
+    matrix&lt;float64&gt; a = ones(2000, 2000);
+    matrix&lt;float64&gt; b = fill(2000, 2000, 2.0);
+    matrix&lt;float64&gt; c = relax(a, b, 100);   // data stays on the GPU for 100 steps
+    print("sum:", sum(c));
+}
+</code></pre>
+              <div class="output"><span class="label">Output</span><pre>sum: 16000000.0</pre></div>
+            </div>
+          </div>
+
+          <div class="tab-panel" role="tabpanel" id="p-http" aria-labelledby="t-http" hidden>
+            <div class="code-window">
+              <div class="code-bar"><span class="lights"><i></i><i></i><i></i></span><span class="file">server.marl</span><button class="copy" type="button">Copy</button></div>
+<pre class="code"><code class="marl">
+import std.http as http;
+
+func home(http.Request req) -&gt; http.Response {
+    return http.html(200, "&lt;h1&gt;Hello from Marlin&lt;/h1&gt;");
+}
+
+func hello(http.Request req) -&gt; http.Response {
+    return http.text(200, "hello " + http.query_param(req, "name") + "\n");
+}
+
+func main() -&gt; void {
+    list&lt;http.Route&gt; routes = [];
+    push(routes, http.get("/", home));
+    push(routes, http.get("/hello", hello));
+    http.serve_concurrent(8080, routes);   // each request runs in its own task
+}
+</code></pre>
+              <div class="output"><span class="label">$ curl "localhost:8080/hello?name=Ada"</span><pre>hello Ada</pre></div>
+            </div>
+          </div>
+
+          <div class="tab-panel" role="tabpanel" id="p-db" aria-labelledby="t-db" hidden>
+            <div class="code-window">
+              <div class="code-bar"><span class="lights"><i></i><i></i><i></i></span><span class="file">users.marl</span><button class="copy" type="button">Copy</button></div>
+<pre class="code"><code class="marl">
+import std.sqlite as sql;
+
+struct User {
+    int64 id;
+    string name;
+    int age;
+}
+
+func main() -&gt; void {
+    sql.Conn db = sql.open(":memory:");
+    sql.clear(sql.exec(db, "CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT, age INT)"));
+    sql.clear(sql.query(db, "INSERT INTO users (name, age) VALUES ($1, $2)",
+                        [sql.arg_text("Ada"), sql.arg_int(36)]));
+    sql.clear(sql.query(db, "INSERT INTO users (name, age) VALUES ($1, $2)",
+                        [sql.arg_text("Alan"), sql.arg_int(41)]));
+
+    sql.Result r = sql.query(db, "SELECT id, name, age FROM users WHERE age &gt; $1",
+                             [sql.arg_int(30)]);
+    list&lt;User&gt; users = scan(r.rows);        // every row becomes a User
+    sql.clear(r);
+    for u in users {
+        print(u.id, u.name, u.age);
+    }
+    free(users);
+    sql.close(db);
+}
+</code></pre>
+              <div class="output"><span class="label">Output</span><pre>1 Ada 36
+2 Alan 41</pre></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= How it works ================= -->
+    <section class="section" id="how">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="kicker">How it works</span>
+          <h2>From <code>.marl</code> to machine code</h2>
+          <p>Marlin is a front end for MLIR, the compiler framework behind many modern ML and HPC tools. Each step can be inspected with <code>--emit</code>.</p>
+        </div>
+
+        <div class="pipeline reveal">
+          <span class="pulse" aria-hidden="true"></span>
+          <div class="stage">
+            <div class="node">.marl</div>
+            <div>
+              <h4>Source</h4>
+              <p>Small, typed syntax. Modules with <code>import</code>.</p>
+            </div>
+          </div>
+          <div class="stage">
+            <div class="node">AST</div>
+            <div>
+              <h4>Checks</h4>
+              <p>Types, race-freedom of parallel loops, task and GPU rules.</p>
+            </div>
+          </div>
+          <div class="stage">
+            <div class="node">MLIR</div>
+            <div>
+              <h4>Dialects</h4>
+              <p>Loops, tensors and tasks as high-level IR.</p>
+              <div class="tags"><span>scf</span><span>tensor</span><span>async</span><span>gpu</span></div>
+            </div>
+          </div>
+          <div class="stage">
+            <div class="node">LLVM</div>
+            <div>
+              <h4>Lowering</h4>
+              <p>CPU code through LLVM IR. GPU kernels as PTX for CUDA and SPIR-V for Vulkan.</p>
+              <div class="tags"><span>nvvm</span><span>spirv</span></div>
+            </div>
+          </div>
+          <div class="stage">
+            <div class="node">EXE</div>
+            <div>
+              <h4>Native binary</h4>
+              <p>One file for Linux, macOS or Windows. No VM, no interpreter.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= Performance ================= -->
+    <section class="section depth-1" id="performance">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="kicker">Performance</span>
+          <h2>Same code, more hardware</h2>
+          <p>When a GPU is there, the same source uses it. Without one, it runs on every CPU core.</p>
+        </div>
+
+        <div class="bench bench-two">
+          <article class="card reveal" data-delay="1">
+            <h3>CPU or GPU, one source</h3>
+            <p>2048 × 2048 <code>float</code> <code>matmul</code>, five times</p>
+            <div class="bars">
+              <div class="bar-row"><div class="meta"><span>CPU, all 20 threads</span><b>350 ms</b></div><div class="bar"><i data-w="100"></i></div></div>
+              <div class="bar-row"><div class="meta"><span>RTX 4060 Laptop (CUDA)</span><b>30 ms</b></div><div class="bar fast"><i data-w="9"></i></div></div>
+            </div>
+            <div class="speedup">11.7× <small>faster</small></div>
+          </article>
+
+          <article class="card reveal" data-delay="2">
+            <h3>Built-in kernel</h3>
+            <p>4096 × 4096 <code>float</code> on the GPU</p>
+            <div class="bars">
+              <div class="bar-row"><div class="meta"><span>hand-written <code>parallel for</code></span><b>270 ms</b></div><div class="bar"><i data-w="100"></i></div></div>
+              <div class="bar-row"><div class="meta"><span>built-in tiled <code>matmul</code></span><b>35 ms</b></div><div class="bar fast"><i data-w="13"></i></div></div>
+            </div>
+            <div class="speedup">7.7× <small>faster</small></div>
+          </article>
+        </div>
+        <p class="footnote">The first card is one <code>@GPU</code> program, run once with <code>MARLIN_GPU=cpu</code> and once on the graphics card (copies to and from the GPU included). Measured on the same laptop; your numbers will differ.</p>
+      </div>
+    </section>
+
+    <!-- ================= Get started ================= -->
+    <section class="section" id="start">
+      <div class="container start">
+        <div class="reveal">
+          <span class="kicker">Quick start</span>
+          <h2>Install in one line</h2>
+          <ol class="steps">
+            <li>
+              <h4>Install</h4>
+              <p>Run the command for your system. It downloads the compiler, verifies it, puts it in your home folder and adds <code>marlin</code> to your PATH. Run it again to update.</p>
+            </li>
+            <li>
+              <h4>Check your setup</h4>
+              <p><code>marlin doctor</code> compiles a few small programs and tells you exactly what is missing, with the command that installs it.</p>
+            </li>
+            <li>
+              <h4>Write and run</h4>
+              <p>Save a <code>.marl</code> file and compile it. You get a native executable; add <code>-O2</code> for speed.</p>
+            </li>
+          </ol>
+          <div class="hero-cta start-cta">
+            <a class="btn btn-primary" href="downloads.html">All downloads</a>
+            <a class="btn btn-ghost" href="docs.html#getting-started">Full setup guide</a>
+          </div>
+        </div>
+
+        <div class="reveal" data-delay="2">
+          <div class="code-window install-window" data-tabs>
+            <div class="code-bar">
+              <span class="lights"><i></i><i></i><i></i></span>
+              <div class="os-tabs" role="tablist" aria-label="Operating system">
+                <button class="os-tab" role="tab" id="os-linux" data-os="linux" aria-controls="os-p-linux" aria-selected="true" tabindex="0" type="button">Linux</button>
+                <button class="os-tab" role="tab" id="os-macos" data-os="macos" aria-controls="os-p-macos" aria-selected="false" tabindex="-1" type="button">macOS</button>
+                <button class="os-tab" role="tab" id="os-windows" data-os="windows" aria-controls="os-p-windows" aria-selected="false" tabindex="-1" type="button">Windows</button>
+              </div>
+              <button class="copy" type="button" data-commands>Copy</button>
+            </div>
+            <div role="tabpanel" id="os-p-linux" aria-labelledby="os-linux">
+<pre class="code terminal"><span class="c"># needs a C compiler, e.g. sudo apt install build-essential</span>
+<span class="p">$ </span><span class="cmd">curl -fsSL https://github.com/MehmetEminKaymaz/marlin/releases/latest/download/install.sh | sh</span>
+<span class="p">$ </span><span class="cmd">marlin doctor</span>
+
+<span class="c"># hello.marl:  func main() -&gt; void { print("hello, ocean"); }</span>
+<span class="p">$ </span><span class="cmd">marlin hello.marl -O2 -o hello</span>
+<span class="p">$ </span><span class="cmd">./hello</span>
+<span class="o">hello, ocean</span></pre>
+            </div>
+            <div role="tabpanel" id="os-p-macos" aria-labelledby="os-macos" hidden>
+<pre class="code terminal"><span class="c"># needs the Command Line Tools: xcode-select --install</span>
+<span class="p">$ </span><span class="cmd">curl -fsSL https://github.com/MehmetEminKaymaz/marlin/releases/latest/download/install.sh | sh</span>
+<span class="p">$ </span><span class="cmd">marlin doctor</span>
+
+<span class="c"># hello.marl:  func main() -&gt; void { print("hello, ocean"); }</span>
+<span class="p">$ </span><span class="cmd">marlin hello.marl -O2 -o hello</span>
+<span class="p">$ </span><span class="cmd">./hello</span>
+<span class="o">hello, ocean</span></pre>
+            </div>
+            <div role="tabpanel" id="os-p-windows" aria-labelledby="os-windows" hidden>
+<pre class="code terminal"><span class="c"># needs Visual Studio Build Tools (C++ and Clang); marlin doctor shows how</span>
+<span class="p">PS&gt; </span><span class="cmd">irm https://github.com/MehmetEminKaymaz/marlin/releases/latest/download/install.ps1 | iex</span>
+<span class="p">PS&gt; </span><span class="cmd">marlin doctor</span>
+
+<span class="c"># hello.marl:  func main() -&gt; void { print("hello, ocean"); }</span>
+<span class="p">PS&gt; </span><span class="cmd">marlin hello.marl -O2 -o hello.exe</span>
+<span class="p">PS&gt; </span><span class="cmd">.\hello.exe</span>
+<span class="o">hello, ocean</span></pre>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CTA ================= -->
+    <section class="section" style="padding-top: 0">
+      <div class="container">
+        <div class="cta-band reveal">
+          <div class="mini-fish" data-fish></div>
+          <h2>Write in comfort with VS Code</h2>
+          <p>The Marlin extension adds syntax colouring, snippets, live errors from the real compiler (through its built-in language server) and a one-key <strong>Compile &amp; Run</strong>.</p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="downloads.html">Download the extension</a>
+            <a class="btn btn-ghost" href="docs.html#editor">Set up the editor</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <a class="brand" href="index.html"><span data-fish="brand"></span>marlin</a>
+      <nav aria-label="Footer">
+        <a href="docs.html">Documentation</a>
+        <a href="downloads.html">Download</a>
+        <a href="docs.html#tasks">Tasks</a>
+        <a href="docs.html#gpu">GPU</a>
+        <a href="docs.html#stdlib">Standard library</a>
+      </nav>
+      <span>© <span data-year>2026</span> Marlin · a research language built on MLIR</span>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/ocean.js"></script>
+</body>
+</html>

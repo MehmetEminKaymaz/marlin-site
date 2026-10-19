@@ -1,0 +1,826 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Marlin Documentation</title>
+  <meta name="description" content="Learn Marlin: setup, syntax, lists, strings, matrices, structs, modules, parallel loops, tasks, GPU functions, the HTTP server and database drivers.">
+  <meta name="theme-color" content="#041530">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#doc">Skip to content</a>
+
+  <header class="nav solid">
+    <div class="container">
+      <a class="brand" href="index.html" aria-label="Marlin home"><span data-fish="brand"></span>marlin</a>
+      <button class="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav-links"><span></span></button>
+      <nav class="nav-links" id="nav-links" aria-label="Main">
+        <a href="index.html#features">Features</a>
+        <a href="index.html#examples">Examples</a>
+        <a href="index.html#performance">Performance</a>
+        <a class="active" href="docs.html">Docs</a>
+        <a class="btn btn-primary btn-sm" href="downloads.html">Download</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="docs-hero">
+    <div class="container">
+      <span class="kicker">Documentation</span>
+      <h1>The Marlin guide</h1>
+      <p>Everything you need to write Marlin programs, from your first <code>print</code> to tasks, GPU functions and web servers.</p>
+    </div>
+    <div class="mini-fish" data-fish></div>
+  </div>
+
+  <div class="container docs-layout">
+    <aside class="sidebar" id="sidebar" aria-label="Documentation">
+      <h5>Start</h5>
+      <a href="#intro">Introduction</a>
+      <a href="#getting-started">Getting started</a>
+      <a href="#cli">Compiler options</a>
+      <a href="#editor">Editor support</a>
+      <h5>Language</h5>
+      <a href="#basics">Variables &amp; types</a>
+      <a href="#control">Control flow</a>
+      <a href="#functions">Functions &amp; lambdas</a>
+      <a href="#lists">Arrays &amp; lists</a>
+      <a href="#strings">Strings</a>
+      <a href="#matrices">Matrices</a>
+      <a href="#structs">Structs</a>
+      <a href="#modules">Modules</a>
+      <h5>Concurrency</h5>
+      <a href="#parallel">Parallel loops</a>
+      <a href="#tasks">Tasks</a>
+      <a href="#gpu">GPU functions</a>
+      <h5>Library</h5>
+      <a href="#stdlib">Standard library</a>
+      <a href="#http">HTTP server</a>
+      <a href="#database">Databases</a>
+      <a href="#builtins">Built-in functions</a>
+      <h5>More</h5>
+      <a href="#roadmap">Status &amp; roadmap</a>
+    </aside>
+
+    <article class="doc" id="doc">
+      <button class="sidebar-toggle" type="button" aria-controls="sidebar" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+        Contents
+      </button>
+
+      <!-- ===== Introduction ===== -->
+      <section id="intro">
+        <h2>Introduction</h2>
+        <p>Marlin is a compiled, statically typed programming language built on <strong>MLIR</strong> and <strong>LLVM</strong>. Its goal is simple: one readable code base that runs on all CPU cores and on the GPU, without rewriting anything in a second language.</p>
+        <ul>
+          <li><strong>Concurrency is part of the language.</strong> <code>parallel for</code>, <code>marl</code> tasks and <code>@GPU</code> functions are keywords, not libraries.</li>
+          <li><strong>The compiler checks the dangerous parts.</strong> Parallel loops that could race, tasks that write to globals and GPU code that touches host-only data are rejected at compile time.</li>
+          <li><strong>Batteries included.</strong> Strings, lists, maps, matrices, structs, files, JSON, an HTTP/1.1 server and client, PostgreSQL and SQLite.</li>
+          <li><strong>Native output.</strong> Programs compile to optimised machine code for Linux, macOS and Windows. There is no virtual machine, and the result is a single file you can copy to another machine.</li>
+        </ul>
+        <div class="callout">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/></svg>
+          <p>Marlin is a young research language and is developing quickly. This guide describes what works today; the <a href="#roadmap">roadmap</a> lists what is still missing.</p>
+        </div>
+      </section>
+
+      <!-- ===== Getting started ===== -->
+      <section id="getting-started">
+        <h2>Getting started</h2>
+        <h3>Install</h3>
+        <p>One command downloads the compiler for your system from the latest release, verifies its SHA-256 checksum, installs it into your home folder and adds <code>marlin</code> to your PATH. Running it again updates Marlin.</p>
+        <div class="code-window install-window" data-tabs>
+          <div class="code-bar">
+            <span class="lights"><i></i><i></i><i></i></span>
+            <div class="os-tabs" role="tablist" aria-label="Operating system">
+              <button class="os-tab" role="tab" id="dos-linux" data-os="linux" aria-controls="dos-p-linux" aria-selected="true" tabindex="0" type="button">Linux / macOS</button>
+              <button class="os-tab" role="tab" id="dos-windows" data-os="windows" aria-controls="dos-p-windows" aria-selected="false" tabindex="-1" type="button">Windows</button>
+            </div>
+            <button class="copy" type="button" data-commands>Copy</button>
+          </div>
+          <div role="tabpanel" id="dos-p-linux" aria-labelledby="dos-linux">
+<pre class="code terminal"><span class="p">$ </span><span class="cmd">curl -fsSL https://github.com/MehmetEminKaymaz/marlin/releases/latest/download/install.sh | sh</span></pre>
+          </div>
+          <div role="tabpanel" id="dos-p-windows" aria-labelledby="dos-windows" hidden>
+<pre class="code terminal"><span class="p">PS&gt; </span><span class="cmd">irm https://github.com/MehmetEminKaymaz/marlin/releases/latest/download/install.ps1 | iex</span></pre>
+          </div>
+        </div>
+        <p>Marlin goes into <code>~/.marlin</code> (on Windows <code>%LOCALAPPDATA%\Programs\Marlin</code>). Open a new terminal afterwards so that the PATH change takes effect. To install by hand, download the archive for your system from the <a href="downloads.html">download page</a>, unpack it anywhere and add its <code>bin</code> folder to PATH.</p>
+
+        <h3>Requirements</h3>
+        <p>Marlin compiles your program to machine code and uses your system's C compiler to link it into an executable.</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>System</th><th>Supported</th><th>You also need</th></tr></thead>
+          <tbody>
+            <tr><td>Linux</td><td>x86-64 and ARM64, glibc 2.31 or newer (Ubuntu 20.04, Debian 11, Fedora, Arch …)</td><td>a C compiler: <code>sudo apt install build-essential</code>, <code>sudo dnf install gcc</code> or <code>sudo pacman -S base-devel</code></td></tr>
+            <tr><td>macOS</td><td>Apple silicon and Intel</td><td>the Command Line Tools: <code>xcode-select --install</code></td></tr>
+            <tr><td>Windows</td><td>10 and 11, x64</td><td>Visual Studio Build Tools with the <em>Desktop development with C++</em> workload and the <em>C++ Clang tools</em> component (the command is below)</td></tr>
+          </tbody>
+        </table></div>
+        <div class="code-window">
+          <div class="code-bar"><span class="lights"><i></i><i></i><i></i></span><span class="file">Windows: Build Tools with Clang</span><button class="copy" type="button" data-commands>Copy</button></div>
+<pre class="code terminal"><span class="p">PS&gt; </span><span class="cmd">winget install Microsoft.VisualStudio.2022.BuildTools --override "--passive --add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Component.VC.Llvm.Clang --includeRecommended"</span></pre>
+        </div>
+        <p>Optional extras, only needed for the features that use them:</p>
+        <ul>
+          <li><strong>GPU:</strong> any graphics card with an up-to-date driver. <code>@GPU</code> code runs through Vulkan on NVIDIA, AMD and Intel GPUs and through Metal on Macs. On NVIDIA cards, installing the CUDA Toolkit adds native CUDA kernels. Without a GPU the same program runs on the CPU.</li>
+          <li><strong><code>std.postgres</code>:</strong> the PostgreSQL client library: <code>sudo apt install libpq5</code> on Linux, <code>brew install libpq</code> on macOS. It ships with Marlin on Windows.</li>
+          <li><strong><code>std.http.client</code>:</strong> libcurl, which is already installed on most Linux systems and on every Mac. It ships with Marlin on Windows.</li>
+        </ul>
+
+        <h3>Check your setup</h3>
+        <p><code>marlin doctor</code> compiles and runs a few small programs, then reports what works and what is missing, with the command to fix it. Lines marked <code>[HATA]</code> (error) must be fixed before programs can be built; <code>[uyari]</code> (warning) only affects the feature it names.</p>
+        <div class="code-window">
+          <div class="code-bar"><span class="lights"><i></i><i></i><i></i></span><span class="file">terminal</span><button class="copy" type="button" data-commands>Copy</button></div>
+<pre class="code terminal"><span class="p">$ </span><span class="cmd">marlin doctor</span>
+<span class="o">  [tamam] baglayici (C derleyicisi): /usr/bin/cc
+  [tamam] deneme programi: derlendi ve calisti (paralel dongu dahil)
+  [tamam] GPU calisirken: cuda (NVIDIA GeForce RTX 4060 Laptop GPU)
+  [tamam] std.http.client (libcurl): kutuphane yuklenebiliyor
+  [uyari] std.postgres (libpq): libpq ... bulunamadi (kurulum: ... 'sudo apt install libpq5' ...)
+
+Kurulum calisiyor. [uyari] satirlari yalnizca ilgili ozellikleri etkiler.</span></pre>
+        </div>
+        <p>(The compiler's messages are currently written in Turkish: <em>tamam</em> = OK, <em>uyari</em> = warning, <em>hata</em> = error.)</p>
+
+        <h3>Your first program</h3>
+        <div class="code-window">
+          <div class="code-bar"><span class="lights"><i></i><i></i><i></i></span><span class="file">hello.marl</span><button class="copy" type="button">Copy</button></div>
+<pre class="code"><code class="marl">
+func main() -&gt; void {
+    int total = 0;
+    for i in 0 .. 5 {
+        total = total + i;
+    }
+    print("total =", total);
+    print("root:", sqrt(total));
+}
+</code></pre>
+        </div>
+        <div class="code-window">
+          <div class="code-bar"><span class="lights"><i></i><i></i><i></i></span><span class="file">terminal</span><button class="copy" type="button" data-commands>Copy</button></div>
+<pre class="code terminal"><span class="p">$ </span><span class="cmd">marlin hello.marl -o hello</span>
+<span class="p">$ </span><span class="cmd">./hello</span>
+<span class="o">total = 10
+root: 3.1622776601683795</span></pre>
+        </div>
+        <p>Without <code>-o</code> the executable is called <code>a.out</code> (<code>a.exe</code> on Windows). The result is a single native file: you can copy it to another machine of the same kind and run it there, no Marlin needed. Compile errors point at the file, line and column, for example <code>hello.marl:3:13: ...</code>.</p>
+
+        <h3>Update and uninstall</h3>
+        <p>To update, run the install command again. To remove Marlin:</p>
+        <div class="code-window">
+          <div class="code-bar"><span class="lights"><i></i><i></i><i></i></span><span class="file">terminal</span><button class="copy" type="button">Copy</button></div>
+<pre class="code terminal"><span class="c"># Linux / macOS</span>
+<span class="p">$ </span><span class="cmd">curl -fsSL https://github.com/MehmetEminKaymaz/marlin/releases/latest/download/install.sh | sh -s -- --uninstall</span>
+<span class="c"># Windows (PowerShell)</span>
+<span class="p">PS&gt; </span><span class="cmd">$env:MARLIN_UNINSTALL = "1"; irm https://github.com/MehmetEminKaymaz/marlin/releases/latest/download/install.ps1 | iex</span></pre>
+        </div>
+
+        <h3>Building from source</h3>
+        <p>You only need this to work on the compiler itself. Requirements: LLVM / MLIR <strong>19.1.7</strong> (the conda-forge packages <code>mlir</code> and <code>llvmdev</code> are the easiest way to get them), CMake 3.25+, a C++20 compiler and Java 11+ for the ANTLR parser generator. Then:</p>
+        <div class="code-window">
+          <div class="code-bar"><span class="lights"><i></i><i></i><i></i></span><span class="file">terminal</span><button class="copy" type="button" data-commands>Copy</button></div>
+<pre class="code terminal"><span class="p">$ </span><span class="cmd">cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DMLIR_DIR=/path/to/lib/cmake/mlir -DMARLIN_ANTLR_FROM_SOURCE=ON</span>
+<span class="p">$ </span><span class="cmd">cmake --build build -j</span>
+<span class="p">$ </span><span class="cmd">./build/marlin doctor</span></pre>
+        </div>
+        <p>The repository's README explains the test suite and how the release packages are made.</p>
+      </section>
+
+      <!-- ===== CLI ===== -->
+      <section id="cli">
+        <h2>Compiler options</h2>
+        <div class="code-window">
+<pre class="code terminal">marlin [source.marl] [options]
+marlin doctor</pre>
+        </div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Option</th><th>What it does</th></tr></thead>
+          <tbody>
+            <tr><td><code>-o file</code></td><td>Name of the output file</td></tr>
+            <tr><td><code>-O0</code> … <code>-O3</code></td><td>Optimisation level. The default is <code>-O0</code>.</td></tr>
+            <tr><td><code>--emit=…</code></td><td>Stop at an intermediate stage (see below)</td></tr>
+            <tr><td><code>-I dir</code></td><td>Extra directory to search for imported modules (can be repeated)</td></tr>
+            <tr><td><code>--gpu=auto</code></td><td>The default. <code>@GPU</code> functions are compiled for the GPU and for the CPU; at run time the program uses the GPU if there is one (CUDA on NVIDIA, Vulkan elsewhere) and the CPU copy otherwise.</td></tr>
+            <tr><td><code>--gpu=on</code></td><td>Like <code>auto</code>, but warns when the CUDA toolkit is missing, so NVIDIA cards would use Vulkan.</td></tr>
+            <tr><td><code>--gpu=off</code></td><td>Compile <code>@GPU</code> functions for the CPU only. Useful for comparing results.</td></tr>
+            <tr><td><code>--print-ast</code></td><td>Print the syntax tree</td></tr>
+            <tr><td><code>--lsp</code></td><td>Run as a language server (used by the editor extension)</td></tr>
+            <tr><td><code>--version</code></td><td>Print the compiler version</td></tr>
+            <tr><td><code>doctor</code></td><td>Check the installation (linker, GPU, libraries) and explain how to fix what is missing</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>Looking inside: <code>--emit</code></h3>
+        <p>The compiler transforms your program step by step: <code>.marl → AST → MLIR → LLVM dialect → LLVM IR → object file → executable</code>. You can stop at any step and look at the result.</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Value</th><th>Shows</th></tr></thead>
+          <tbody>
+            <tr><td><code>mlir</code></td><td>High-level MLIR (<code>scf</code>, <code>tensor</code>, <code>async</code> …)</td></tr>
+            <tr><td><code>gpu-mlir</code></td><td>MLIR after GPU outlining: every kernel inside a <code>gpu.module</code>, launched with <code>gpu.launch_func</code></td></tr>
+            <tr><td><code>llvm-mlir</code></td><td>MLIR lowered to the LLVM dialect</td></tr>
+            <tr><td><code>llvm-ir</code></td><td>LLVM IR, as in <code>.ll</code> files</td></tr>
+            <tr><td><code>obj</code></td><td>Object file, not yet linked</td></tr>
+            <tr><td><code>exe</code></td><td>Executable (the default)</td></tr>
+          </tbody>
+        </table></div>
+      </section>
+
+      <!-- ===== Editor ===== -->
+      <section id="editor">
+        <h2>Editor support</h2>
+        <p>The VS Code extension gives you syntax colouring, snippets, live error reporting and a <strong>Compile &amp; Run</strong> button. Errors come from the real compiler front end running as a language server (<code>marlin --lsp</code>), so the editor and the compiler always agree.</p>
+        <ol>
+          <li>Install Marlin first (see <a href="#getting-started">Getting started</a>); the extension uses the <code>marlin</code> command on your PATH.</li>
+          <li>Download <code>marlin-vscode.vsix</code> from the <a href="downloads.html">download page</a>.</li>
+          <li>In VS Code's Extensions panel, choose <strong>… → Install from VSIX…</strong> and pick the downloaded file.</li>
+          <li>Open any <code>.marl</code> file. Press <code>Ctrl+Alt+R</code> (or the ▷ button) to compile and run it.</li>
+        </ol>
+        <p>If <code>marlin</code> is not on the PATH that VS Code sees, set <strong>Marlin: Compiler Path</strong> in the settings. After updating Marlin, restart the language server from the command palette: <strong>Marlin: Dil Sunucusunu Yeniden Başlat</strong> (the extension's commands are in Turkish for now).</p>
+      </section>
+
+      <!-- ===== Basics ===== -->
+      <section id="basics">
+        <h2>Variables &amp; types</h2>
+        <div class="code-window">
+          <div class="code-bar"><span class="lights"><i></i><i></i><i></i></span><span class="file">basics.marl</span><button class="copy" type="button">Copy</button></div>
+<pre class="code"><code class="marl">
+int counter = 0;              // globals need a constant initial value
+float rate = 0.5;
+string last_message;          // or no value at all: zero / empty string
+
+func main() -&gt; void {
+    int x = 5;
+    let y = 2.5;              // the type is inferred (float64)
+    bool ok = x &gt; 3 &amp;&amp; y &lt; 10;
+    string greeting = "hello";
+    int[4] arr = [1, 2, 3, 4];
+    arr[0] = 10;
+    print(x, y, ok, greeting, arr[0]);
+}
+</code></pre>
+        </div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Kind</th><th>Types</th></tr></thead>
+          <tbody>
+            <tr><td>Signed integers</td><td><code>int8</code> <code>int16</code> <code>int</code> (32-bit) <code>int64</code></td></tr>
+            <tr><td>Unsigned integers</td><td><code>uint8</code> <code>uint16</code> <code>uint</code> <code>uint64</code></td></tr>
+            <tr><td>Floating point</td><td><code>float</code> (32-bit) <code>float64</code></td></tr>
+            <tr><td>Others</td><td><code>bool</code> <code>char</code> <code>string</code></td></tr>
+            <tr><td>Collections</td><td>arrays <code>int[5]</code>, lists <code>list&lt;int&gt;</code>, matrices <code>matrix&lt;float, N&gt;</code></td></tr>
+            <tr><td>Functions</td><td><code>(int) -&gt; int</code></td></tr>
+            <tr><td>Tasks</td><td><code>task&lt;T&gt;</code></td></tr>
+            <tr><td>Your own</td><td><code>struct Point { … }</code></td></tr>
+          </tbody>
+        </table></div>
+        <ul>
+          <li>Numeric types convert automatically (<code>int h = 7.5;</code> gives 7).</li>
+          <li>Conditions must be <code>bool</code>: write <code>if x != 0</code>, not <code>if x</code>.</li>
+          <li>Every program needs a <code>main</code> without parameters that returns <code>void</code> or <code>int</code>.</li>
+        </ul>
+      </section>
+
+      <!-- ===== Control flow ===== -->
+      <section id="control">
+        <h2>Control flow</h2>
+        <div class="code-window">
+          <div class="code-bar"><span class="lights"><i></i><i></i><i></i></span><span class="file">control.marl</span><button class="copy" type="button">Copy</button></div>
+<pre class="code"><code class="marl">
+if x &gt; 10 {
+    print("big");
+} else if x &gt; 3 {
+    print("medium");
+} else {
+    print("small");
+}
+
+for i in 0 .. 10 { }              // 0 to 9
+for i in 0 .. 10 step 2 { }       // 0, 2, 4, 6, 8
+for e in arr { }                  // every element
+while x &gt; 0 { x = x - 1; }
+// break and continue work in every loop
+</code></pre>
+        </div>
+        <p>The loop variable of a <code>for</code> cannot be changed inside the loop, and <code>step</code> must be positive.</p>
+      </section>
+
+      <!-- ===== Functions ===== -->
+      <section id="functions">
+        <h2>Functions &amp; lambdas</h2>
+        <div class="code-window">
+          <div class="code-bar"><span class="lights"><i></i><i></i><i></i></span><span class="file">functions.marl</span><button class="copy" type="button">Copy</button></div>
+<pre class="code"><code class="marl">
+func add(int a, int b) -&gt; int {
+    return a + b;
+}
+
+func apply((int) -&gt; int f, int v) -&gt; int {
+    return f(v);
+}
+
+func main() -&gt; void {
+    let square = (int n) -&gt; int | n * n;
+    print(square(4), add(2, 3), apply(square, 9));
+}
+</code></pre>
+        </div>
+        <ul>
+          <li>Functions are values: they can be stored in variables, lists and struct fields, passed to other functions and returned.</li>
+          <li>Lambdas use the form <code>(params) -&gt; type | expression</code>.</li>
+          <li>Lambdas cannot capture local variables; pass what they need as parameters.</li>
+        </ul>
+      </section>
+
+      <!-- ===== Lists ===== -->
+      <section id="lists">
+        <h2>Arrays &amp; lists</h2>
+        <div class="code-window">
+          <div class="code-bar"><span class="lights"><i></i><i></i><i></i></span><span class="file">lists.marl</span><button class="copy" type="button">Copy</button></div>
+<pre class="code"><code class="marl">
+list&lt;int&gt; l = [1, 2, 3];
+list&lt;float&gt; empty = [];          // the type must be written
+push(l, 4);                       // append
+int last = pop(l);                // remove and return the last element
+l[0] = 10;
+print(len(l), l[0], last);
+for e in l { }
+free(l);                          // lists are released by hand
+</code></pre>
+        </div>
+        <div class="table-wrap"><table>
+          <thead><tr><th></th><th>Array <code>int[5]</code></th><th>List <code>list&lt;int&gt;</code></th></tr></thead>
+          <tbody>
+            <tr><td>Size</td><td>Fixed in the source</td><td>Grows and shrinks (<code>push</code>, <code>pop</code>)</td></tr>
+            <tr><td>Passing to functions</td><td>The size is part of the type</td><td>Any length</td></tr>
+            <tr><td>Returning from functions</td><td>No</td><td>Yes</td></tr>
+            <tr><td>Bounds checks</td><td>Constant indices, at compile time</td><td>Every access, at run time</td></tr>
+          </tbody>
+        </table></div>
+        <ul>
+          <li><strong>Lists are references.</strong> <code>list&lt;int&gt; b = a;</code> does not copy: both names see the same list, and a function can change a list it receives.</li>
+          <li><strong>Release lists with <code>free(l)</code></strong> when you are done. Strings stored inside are released with the list.</li>
+          <li>A list literal passed straight to a function (<code>total([1, 2, 3])</code>) is released automatically when the function only <em>borrows</em> it. The compiler works this out for you.</li>
+          <li>Elements can be numbers, <code>bool</code>, <code>char</code>, strings, functions, tasks or structs.</li>
+        </ul>
+      </section>
+
+      <!-- ===== Strings ===== -->
+      <section id="strings">
+        <h2>Strings</h2>
+        <div class="code-window">
+          <div class="code-bar"><span class="lights"><i></i><i></i><i></i></span><span class="file">strings.marl</span><button class="copy" type="button">Copy</button></div>
+<pre class="code"><code class="marl">
+string name = "world";
+string hi = "hello " + name;          // concatenation creates a new string
+print(hi, len(hi), hi[0]);            // hello world 11 h
+
+if name == "world" &amp;&amp; "abc" &lt; "abd" { }   // compared by content
+
+string msg = "x = " + str(42);        // str: number, bool or char to string
+int64 n = to_int("40") + 2;           // to_int / to_float: string to number
+float64 f = to_float("2.5");
+</code></pre>
+        </div>
+        <ul>
+          <li><strong>Strings are immutable</strong> and their memory is managed for you with reference counting. No <code>free</code> needed.</li>
+          <li>Length and indexing count bytes. Text is UTF-8, so non-ASCII letters take more than one byte.</li>
+          <li><code>+</code> joins two strings only; convert numbers with <code>str(...)</code>.</li>
+          <li><code>to_int</code> and <code>to_float</code> stop the program with a message if the text is not a number.</li>
+        </ul>
+      </section>
+
+      <!-- ===== Matrices ===== -->
+      <section id="matrices">
+        <h2>Matrices</h2>
+        <div class="code-window">
+          <div class="code-bar"><span class="lights"><i></i><i></i><i></i></span><span class="file">matrices.marl</span><button class="copy" type="button">Copy</button></div>
+<pre class="code"><code class="marl">
+matrix&lt;float&gt; a = [[1, 2], [3, 4]];
+matrix&lt;float&gt; b = ones(2, 2);         // zeros(r, c), ones(r, c), fill(r, c, value)
+matrix&lt;float&gt; c = a + b * 2;          // element-wise; a scalar applies to every element
+matrix&lt;float&gt; d = matmul(a, b);       // matrix product
+c[0, 1] = 7;                          // [row, column]
+print(rows(c), cols(c), sum(c));
+print(transpose(a));
+
+matrix&lt;int, 1&gt; v = [1, 2, 3];         // one dimension: a vector
+matrix&lt;float, 3&gt; t = zeros(4, 8, 8);  // three dimensions
+t[0, 2, 5] = 1;
+print(shape(t, 0), shape(t, 2));      // 4 8
+</code></pre>
+        </div>
+        <ul>
+          <li>The number of dimensions is part of the type (<code>matrix&lt;T&gt;</code> is <code>matrix&lt;T, 2&gt;</code>); the length of each dimension is decided at run time.</li>
+          <li><strong>Matrices are values.</strong> <code>matrix&lt;int&gt; b = a;</code> makes a copy. Memory is managed automatically.</li>
+          <li><code>+ - * /</code> are element-wise. A whole expression such as <code>a + b * 2 - c</code> is fused into a single loop with no temporaries, so writing it as one expression is fastest.</li>
+          <li>On the CPU, <code>matmul</code> is spread across all cores.</li>
+          <li>Shapes and indices are checked at run time with a clear message.</li>
+        </ul>
+      </section>
+
+      <!-- ===== Structs ===== -->
+      <section id="structs">
+        <h2>Structs</h2>
+        <div class="code-window">
+          <div class="code-bar"><span class="lights"><i></i><i></i><i></i></span><span class="file">structs.marl</span><button class="copy" type="button">Copy</button></div>
+<pre class="code"><code class="marl">
+struct Point {
+    float64 x;
+    float64 y;
+}
+
+struct Circle {
+    Point center;                 // a field can be another struct
+    float64 r;
+    list&lt;int&gt; tags;
+}
+
+func shift(Point p, float64 dx) -&gt; Point {
+    p.x = p.x + dx;
+    return p;
+}
+
+func main() -&gt; void {
+    Point a = Point(1, 2);        // fields in declaration order
+    Point b = a;                  // a copy
+    b.x = 10;                     // a.x is still 1
+    Point c = shift(a, 5);
+    print(a.x, c.x, shift(a, 1).x);
+
+    Circle cm = Circle(Point(0, 0), 2.5, [1, 2]);
+    cm.center.x = 7;
+    push(cm.tags, 3);
+}
+</code></pre>
+        </div>
+        <p>Fields can be numbers, <code>bool</code>, <code>char</code>, strings, arrays, lists, matrices, functions and other structs. A function field turns a list of structs into a routing table:</p>
+        <div class="code-window">
+          <div class="code-bar"><span class="lights"><i></i><i></i><i></i></span><span class="file">commands.marl</span><button class="copy" type="button">Copy</button></div>
+<pre class="code"><code class="marl">
+struct Command {
+    string name;
+    (int) -&gt; int run;
+}
+
+list&lt;Command&gt; commands = [Command("square", (int v) -&gt; int | v * v),
+                          Command("double", (int v) -&gt; int | v * 2)];
+for i in 0 .. len(commands) {
+    if commands[i].name == "square" { print(commands[i].run(5)); }   // 25
+}
+</code></pre>
+        </div>
+        <ul>
+          <li><code>list&lt;Point&gt;</code> is a reference, but its elements are values: <code>Point p = l[0];</code> is a copy. Write <code>l[0].x = 9</code> to change the element in place.</li>
+          <li>A struct whose fields are numbers, <code>bool</code>, <code>char</code> or strings can be a <strong>global</strong> (declared without a value, assigned in functions).</li>
+          <li>Mark a struct <code>public</code> to use it from other modules.</li>
+        </ul>
+      </section>
+
+      <!-- ===== Modules ===== -->
+      <section id="modules">
+        <h2>Modules</h2>
+        <p>Every <code>.marl</code> file is a module. Imports go at the top of the file.</p>
+        <div class="code-window">
+          <div class="code-bar"><span class="lights"><i></i><i></i><i></i></span><span class="file">main.marl</span><button class="copy" type="button">Copy</button></div>
+<pre class="code"><code class="marl">
+import tools.vector;                         // tools/vector.marl
+import tools.vector as v;                    // with a short name
+from tools.vector import norm, dot as inner; // names imported directly
+
+func main() -&gt; void {
+    print(tools.vector.norm(3.0, 4.0));
+    print(v.norm(3.0, 4.0));
+    print(norm(3.0, 4.0), inner(1.0, 2.0));
+}
+</code></pre>
+        </div>
+        <div class="code-window">
+          <div class="code-bar"><span class="lights"><i></i><i></i><i></i></span><span class="file">tools/vector.marl</span><button class="copy" type="button">Copy</button></div>
+<pre class="code"><code class="marl">
+public int calls = 0;                 // other modules can read and write it
+float64 SCALE = 1.0;                  // private
+
+public func norm(float64 x, float64 y) -&gt; float64 { return sqrt(x * x + y * y) * SCALE; }
+public func dot(float64 a, float64 b) -&gt; float64 { return a * b; }
+func helper() -&gt; int { return 1; }    // private: only this file
+</code></pre>
+        </div>
+        <ul>
+          <li>Only <code>public</code> declarations can be imported. Everything else is private.</li>
+          <li>A module only sees its own names and what it imports. Modules may import each other.</li>
+          <li>Names starting with <code>std</code> are reserved for the standard library.</li>
+        </ul>
+      </section>
+
+      <!-- ===== Parallel ===== -->
+      <section id="parallel">
+        <h2>Parallel loops</h2>
+        <div class="code-window">
+          <div class="code-bar"><span class="lights"><i></i><i></i><i></i></span><span class="file">parallel.marl</span><button class="copy" type="button">Copy</button></div>
+<pre class="code"><code class="marl">
+parallel for i in 0 .. n {
+    result[i] = heavy(data[i]);
+}
+</code></pre>
+        </div>
+        <p><code>parallel for</code> spreads the iterations over the processor's cores. Because iterations run at the same time, no two of them may write the same data. The compiler checks this and refuses unsafe loops:</p>
+        <ul>
+          <li>No assignment to variables declared outside the loop (<code>total = total + i</code> is rejected; write into an array and use <code>sum</code>).</li>
+          <li>Outside arrays, lists and matrices may only be written at the loop index: <code>a[i] = …</code>, <code>m[i, j] = …</code>.</li>
+          <li>An array written in the loop may only be read at the same index.</li>
+          <li>No <code>push</code>, <code>pop</code>, <code>free</code>, <code>break</code> or <code>return</code>. <code>continue</code> is fine.</li>
+          <li>Called functions must not change shared data.</li>
+        </ul>
+        <div class="callout">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg>
+          <p>These rules are strict and reject some loops that would be safe. In return, every parallel loop that compiles gives the correct result. <code>print</code> is allowed inside, but the order of lines is not defined.</p>
+        </div>
+      </section>
+
+      <!-- ===== Tasks ===== -->
+      <section id="tasks">
+        <h2>Tasks</h2>
+        <p>A task runs a function at the same time as the rest of your program. Start one with <code>marl</code>, collect its result with <code>await</code>.</p>
+        <div class="code-window">
+          <div class="code-bar"><span class="lights"><i></i><i></i><i></i></span><span class="file">tasks.marl</span><button class="copy" type="button">Copy</button></div>
+<pre class="code"><code class="marl">
+func part(int64 from_, int64 to) -&gt; int64 {
+    int64 s = 0;
+    for i in from_ .. to { s = s + i % 7; }
+    return s;
+}
+
+func log_start(string msg) -&gt; void {
+    print(msg);
+}
+
+func main() -&gt; void {
+    marl log_start("started");                // start and forget
+
+    list&lt;task&lt;int64&gt;&gt; jobs = [];
+    for k in 0 .. 8 {
+        push(jobs, marl part(k * 1000000, (k + 1) * 1000000));
+    }
+    int64 total = 0;
+    for j in jobs {
+        total = total + await(j);             // wait for each result
+    }
+    free(jobs);
+    print("total:", total);
+}
+</code></pre>
+        </div>
+        <ul>
+          <li><code>marl f(a, b)</code> starts <code>f</code> in a new task and immediately returns a <code>task&lt;T&gt;</code>, where <code>T</code> is the return type of <code>f</code>. <code>await(t)</code> waits for it; a task can be awaited more than once.</li>
+          <li><strong>When <code>main</code> returns, the program ends.</strong> Tasks that are still running are not waited for.</li>
+          <li><strong>Arguments are copied</strong>, including lists, arrays and matrices. A task never shares a list with the code that started it.</li>
+          <li><strong>Tasks cannot write to global variables</strong>; results come back only through <code>await</code>. Reading globals is fine.</li>
+          <li>A function that contains <code>await</code> cannot be used as a value, and <code>marl</code> / <code>await</code> are not allowed inside <code>parallel for</code>.</li>
+          <li>Results can be numbers, <code>bool</code>, <code>char</code>, strings, functions, <code>void</code> or lists of these.</li>
+        </ul>
+        <p>Under the hood, tasks are MLIR <code>async</code> operations on a thread pool. Functions that wait are compiled as coroutines, so waiting frees the thread for other work: far more tasks than threads can be waiting at the same time without deadlock.</p>
+        <div class="callout">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/></svg>
+          <p>Very short tasks may appear to run one after another: starting a task takes longer than printing ten numbers. Give each task real work (or a <code>sleep</code>) and you will see their output interleave. Each <code>print</code> line is always written whole.</p>
+        </div>
+      </section>
+
+      <!-- ===== GPU ===== -->
+      <section id="gpu">
+        <h2>GPU functions</h2>
+        <p>Mark a function with <code>@GPU</code> to run it on the graphics card. Unmarked functions are <code>@CPU</code>.</p>
+        <div class="code-window">
+          <div class="code-bar"><span class="lights"><i></i><i></i><i></i></span><span class="file">gpu.marl</span><button class="copy" type="button">Copy</button></div>
+<pre class="code"><code class="marl">
+@GPU
+func relax(matrix&lt;float64&gt; a, matrix&lt;float64&gt; b, int n) -&gt; matrix&lt;float64&gt; {
+    matrix&lt;float64&gt; x = a;
+    for k in 0 .. n {             // this loop runs on the CPU and launches GPU work
+        x = x * 0.5 + b;          // this runs on the GPU
+    }
+    return x;
+}
+
+func main() -&gt; void {
+    matrix&lt;float64&gt; a = ones(2000, 2000);
+    matrix&lt;float64&gt; b = ones(2000, 2000);
+    matrix&lt;float64&gt; c = relax(a, b, 100);   // a and b go to the GPU, the result comes back
+    print(sum(c));
+}
+</code></pre>
+        </div>
+        <ul>
+          <li><strong>Matrices live in GPU memory.</strong> Parameters are copied to the GPU when a CPU function calls a GPU function, and the result is copied back. GPU-to-GPU calls copy nothing.</li>
+          <li><strong><code>parallel for</code> and matrix operations become GPU kernels.</strong> Each iteration of a <code>parallel for</code> is one GPU thread.</li>
+          <li><strong><code>matmul</code> uses its own tiled kernel</strong> with shared memory, much faster than a hand-written loop.</li>
+          <li>Inside <code>@GPU</code>: numbers, <code>bool</code>, <code>char</code> and matrices only; only <code>@GPU</code> functions may be called; matrix elements are accessed inside <code>parallel for</code>.</li>
+          <li>Compile with <code>--gpu=off</code> to run the same program entirely on the CPU, with bounds checks. Use <code>--emit=gpu-mlir</code> to see the kernels.</li>
+        </ul>
+        <div class="callout warn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17h.01"/></svg>
+          <p>Every <code>@GPU</code> function is compiled twice: for the GPU and for the CPU. At run time the program picks CUDA on NVIDIA cards (when the CUDA Toolkit was present at compile time), Vulkan on other GPUs (Metal through MoltenVK on Macs, where the library is placed next to the program) and the CPU copy when there is no usable GPU. <code>MARLIN_GPU=cpu|cuda|vulkan</code> forces a choice and <code>MARLIN_GPU_REPORT=1</code> prints the one that was made. Copies between CPU and GPU have a cost: the GPU wins on large matrices and on many operations while data stays on the device. macOS GPU support is new and has had little testing.</p>
+        </div>
+      </section>
+
+      <!-- ===== Stdlib ===== -->
+      <section id="stdlib">
+        <h2>Standard library</h2>
+        <p>Standard modules are imported like any other module. Each one is written in Marlin on top of a small C core.</p>
+        <div class="code-window">
+          <div class="code-bar"><span class="lights"><i></i><i></i><i></i></span><span class="file">numbers.marl</span><button class="copy" type="button">Copy</button></div>
+<pre class="code"><code class="marl">
+import std.string as strs;
+import std.file as file;
+
+func main() -&gt; void {
+    file.write_text("numbers.txt", "3,5,8\n");
+    list&lt;string&gt; parts = strs.split(strs.trim(file.read_text("numbers.txt")), ",");
+    int64 total = 0;
+    for p in parts {
+        total = total + to_int(p);
+    }
+    print(total, strs.join(parts, "+"));    // 16 3+5+8
+    free(parts);
+}
+</code></pre>
+        </div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Module</th><th>Contents</th></tr></thead>
+          <tbody>
+            <tr><td><code>std.string</code></td><td><code>substr</code> <code>find</code> <code>find_from</code> <code>contains</code> <code>starts_with</code> <code>ends_with</code> <code>replace</code> <code>trim</code> <code>upper</code> <code>lower</code> <code>split</code> <code>join</code></td></tr>
+            <tr><td><code>std.file</code></td><td><code>exists</code> <code>read_text</code> <code>write_text</code> <code>append_text</code> <code>read_lines</code> <code>remove</code>; line by line: <code>open</code> <code>read_line</code> <code>eof</code> <code>write</code> <code>close</code></td></tr>
+            <tr><td><code>std.io</code></td><td><code>read_line()</code> <code>eof()</code> <code>write(text)</code></td></tr>
+            <tr><td><code>std.os</code></td><td><code>args()</code> <code>env(name)</code> <code>exit(code)</code></td></tr>
+            <tr><td><code>std.time</code></td><td><code>now()</code> <code>sleep(seconds)</code></td></tr>
+            <tr><td><code>std.random</code></td><td><code>seed</code> <code>random</code> <code>rand_int</code> <code>rand_matrix</code></td></tr>
+            <tr><td><code>std.math</code></td><td><code>PI</code> <code>E</code></td></tr>
+            <tr><td><code>std.http</code></td><td>HTTP/1.1 server with keep-alive (<a href="#http">below</a>)</td></tr>
+            <tr><td><code>std.http.client</code></td><td>HTTP and HTTPS client: <code>get</code> <code>post</code> <code>request</code> <code>request_timeout</code> <code>header</code>; the answer is a <code>Reply</code> with <code>ok</code> <code>error</code> <code>status</code> <code>headers</code> <code>body</code></td></tr>
+            <tr><td><code>std.json</code></td><td>JSON parser: <code>parse</code> <code>get</code> <code>has</code> <code>at</code> <code>length</code> <code>keys</code> <code>kind</code> <code>as_string</code> <code>as_int</code> <code>as_float</code> <code>as_bool</code> <code>quote</code> <code>free</code>; the built-ins <code>from_json</code> and <code>to_json</code> convert straight to and from structs, lists and maps</td></tr>
+            <tr><td><code>std.postgres</code> <code>std.sqlite</code></td><td>Database drivers (<a href="#database">below</a>)</td></tr>
+          </tbody>
+        </table></div>
+      </section>
+
+      <!-- ===== HTTP ===== -->
+      <section id="http">
+        <h2>HTTP server</h2>
+        <div class="code-window">
+          <div class="code-bar"><span class="lights"><i></i><i></i><i></i></span><span class="file">server.marl</span><button class="copy" type="button">Copy</button></div>
+<pre class="code"><code class="marl">
+import std.http as http;
+
+func home(http.Request req) -&gt; http.Response {
+    return http.html(200, "&lt;h1&gt;hello&lt;/h1&gt;\n");
+}
+
+func greet(http.Request req) -&gt; http.Response {
+    return http.text(200, "hello " + http.query_param(req, "name") + "\n");   // /greet?name=Ada
+}
+
+func save(http.Request req) -&gt; http.Response {
+    http.Response res = http.json(201, "{\"length\": " + str(len(req.body)) + "}");
+    http.add_header(res, "X-Server", "marlin");
+    return res;
+}
+
+func main() -&gt; void {
+    list&lt;http.Route&gt; routes = [];
+    push(routes, http.get("/", home));
+    push(routes, http.get("/greet", greet));
+    push(routes, http.post("/save", save));
+    push(routes, http.get("/files/*", (http.Request req) -&gt; http.Response | http.text(200, req.path)));
+    http.serve(8080, routes);          // never returns; stop with Ctrl+C
+}
+</code></pre>
+        </div>
+        <ul>
+          <li><strong>Requests</strong> carry <code>method</code>, <code>path</code>, <code>query</code>, <code>headers</code> and <code>body</code>. Helpers: <code>header</code>, <code>query_param</code>, <code>form_value</code>, <code>url_decode</code>.</li>
+          <li><strong>Responses</strong> are built with <code>text</code>, <code>html</code>, <code>json</code>, <code>response</code> and <code>redirect</code>. <code>Content-Length</code> and <code>Connection</code> are added for you.</li>
+          <li><strong>Routing:</strong> the first route matching path and method wins; <code>/files/*</code> is a prefix. Wrong method gives 405, no match gives 404.</li>
+          <li><strong>Invalid requests never reach your handler.</strong> The parser, written from RFC 9112, answers 400, 408, 413, 431, 501 or 505 by itself.</li>
+          <li><strong>Concurrency:</strong> <code>http.serve_concurrent(port, routes)</code> handles each request in its own task, so a slow handler does not hold up the others.</li>
+          <li>For your own loop: <code>listen</code>, <code>next</code>, <code>dispatch</code>, <code>respond</code>, <code>handle</code>, <code>close</code>.</li>
+        </ul>
+        <p>Connections are kept alive between requests and chunked request bodies are decoded for you. The server does not speak HTTPS itself yet: put nginx or Caddy in front of it. To call other services use <code>std.http.client</code>, and <code>std.json</code> to read and write JSON (see <a href="#stdlib">Standard library</a>).</p>
+      </section>
+
+      <!-- ===== Database ===== -->
+      <section id="database">
+        <h2>Databases</h2>
+        <p><code>std.postgres</code> (built on libpq) and <code>std.sqlite</code> share the same API. Only opening the connection differs.</p>
+        <div class="code-window">
+          <div class="code-bar"><span class="lights"><i></i><i></i><i></i></span><span class="file">users.marl</span><button class="copy" type="button">Copy</button></div>
+<pre class="code"><code class="marl">
+import std.postgres as pg;
+
+struct User {
+    int64 id;
+    string name;
+    int age;
+}
+
+func main() -&gt; void {
+    pg.Conn db = pg.connect("host=localhost dbname=app user=marlin password=secret");
+    if !db.ok { print(db.error); return; }
+
+    pg.Result r = pg.query(db, "INSERT INTO users (name, age) VALUES ($1, $2) RETURNING id",
+                           [pg.arg_text("Ada"), pg.arg_int(36)]);
+    if !r.ok { print(r.error, r.code); }        // code: SQLSTATE, e.g. 23505
+    else { print("new id:", pg.get_int(r, 0, 0)); }
+    pg.clear(r);
+
+    r = pg.query(db, "SELECT id, name, age FROM users WHERE age &gt; $1", [pg.arg_int(18)]);
+    list&lt;User&gt; users = scan(r.rows);           // one User per row
+    pg.clear(r);
+    for u in users { print(u.id, u.name, u.age); }
+    free(users);
+
+    pg.close(db);
+}
+</code></pre>
+        </div>
+        <ul>
+          <li><strong>Parameters</strong> are passed as <code>$1</code>, <code>$2</code>, … and never pasted into the SQL text, so there is no SQL injection. Use <code>arg_null()</code> for NULL.</li>
+          <li><strong><code>scan(r.rows)</code></strong> fills struct fields whose names match the column names. <code>list&lt;User&gt; l = scan(…)</code> takes every row, <code>User u = scan(…)</code> the first one.</li>
+          <li><strong>Errors do not stop the program:</strong> check <code>db.ok</code>, <code>r.ok</code>, <code>r.error</code> and <code>r.code</code>.</li>
+          <li><strong>Transactions:</strong> <code>begin</code>, <code>commit</code>, <code>rollback</code>.</li>
+          <li><strong>Pools:</strong> keep a global <code>pg.Pool</code> and call <code>pg.pool_query</code> from tasks or <code>serve_concurrent</code> handlers to run queries in parallel.</li>
+          <li><strong>SQLite:</strong> <code>sql.open("data.db")</code>, or <code>":memory:"</code> for a temporary database. SQLite is built into Marlin; nothing to install.</li>
+          <li><strong>PostgreSQL</strong> needs the client library libpq on the machine that runs the program (<code>sudo apt install libpq5</code>, <code>brew install libpq</code>; on Windows it is copied next to your program). Without it, <code>connect</code> fails with an error that says how to install it. <code>MARLIN_PQ_LIBRARY</code> can point to a specific copy.</li>
+        </ul>
+      </section>
+
+      <!-- ===== Builtins ===== -->
+      <section id="builtins">
+        <h2>Built-in functions</h2>
+        <p>Built-ins need no import.</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Area</th><th>Functions</th></tr></thead>
+          <tbody>
+            <tr><td>Output</td><td><code>print(a, b, …)</code>: values separated by spaces, followed by a newline</td></tr>
+            <tr><td>Time</td><td><code>time()</code>: seconds as <code>float64</code>, for measuring durations</td></tr>
+            <tr><td>Maths</td><td><code>sqrt sin cos tan atan atan2 tanh exp log log2 log10 pow</code></td></tr>
+            <tr><td>Rounding</td><td><code>floor ceil round trunc</code></td></tr>
+            <tr><td>Other</td><td><code>abs min max</code></td></tr>
+            <tr><td>Lists</td><td><code>push pop free len</code></td></tr>
+            <tr><td>Strings</td><td><code>str to_int to_float len</code></td></tr>
+            <tr><td>Matrices</td><td><code>zeros ones fill sum shape</code>; 2-D only: <code>matmul transpose rows cols</code></td></tr>
+            <tr><td>Tasks</td><td><code>await</code></td></tr>
+            <tr><td>Databases</td><td><code>scan</code></td></tr>
+          </tbody>
+        </table></div>
+        <div class="code-window">
+          <div class="code-bar"><span class="lights"><i></i><i></i><i></i></span><span class="file">timing.marl</span><button class="copy" type="button">Copy</button></div>
+<pre class="code"><code class="marl">
+float64 start = time();
+matrix&lt;float64&gt; c = matmul(a, b);
+print("took", time() - start, "seconds");
+</code></pre>
+        </div>
+      </section>
+
+      <!-- ===== Roadmap ===== -->
+      <section id="roadmap">
+        <h2>Status &amp; roadmap</h2>
+        <p>Marlin is developed as part of a PhD thesis on compiling one code base for both CPUs and GPUs. Today it produces native executables for Linux (x86-64, ARM64), macOS (Apple silicon, Intel) and Windows (x64), with GPU kernels for CUDA and Vulkan and an automatic fallback to the CPU.</p>
+        <h3>Not there yet</h3>
+        <ul>
+          <li>Struct and matrix results from tasks; tasks in struct fields</li>
+          <li>Slicing (<code>m[0]</code> as a row), reductions along an axis, matrix comparison</li>
+          <li>Global lists and matrices, nested lists, struct arrays</li>
+          <li>HTTPS in the HTTP server</li>
+          <li>Hover, go-to-definition and completion in the editor</li>
+          <li>Compiler messages in English</li>
+          <li>Cross-compiling for another platform than the one you are on</li>
+        </ul>
+        <div class="doc-nav">
+          <a class="btn btn-ghost btn-sm" href="index.html">← Home</a>
+          <a class="btn btn-primary btn-sm" href="#intro">Back to top ↑</a>
+        </div>
+      </section>
+    </article>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <a class="brand" href="index.html"><span data-fish="brand"></span>marlin</a>
+      <nav aria-label="Footer">
+        <a href="index.html">Home</a>
+        <a href="downloads.html">Download</a>
+        <a href="index.html#examples">Examples</a>
+        <a href="#tasks">Tasks</a>
+        <a href="#gpu">GPU</a>
+      </nav>
+      <span>© <span data-year>2026</span> Marlin · a research language built on MLIR</span>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

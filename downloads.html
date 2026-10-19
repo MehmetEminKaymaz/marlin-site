@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Download Marlin</title>
+  <meta name="description" content="Download the Marlin compiler for Linux, macOS and Windows. Install with one command or grab the archive for your system, plus the VS Code extension.">
+  <meta name="theme-color" content="#041530">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="nav solid">
+    <div class="container">
+      <a class="brand" href="index.html" aria-label="Marlin home"><span data-fish="brand"></span>marlin</a>
+      <button class="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav-links"><span></span></button>
+      <nav class="nav-links" id="nav-links" aria-label="Main">
+        <a href="index.html#features">Features</a>
+        <a href="index.html#examples">Examples</a>
+        <a href="index.html#performance">Performance</a>
+        <a href="docs.html">Docs</a>
+        <a class="btn btn-primary btn-sm" href="downloads.html" aria-current="page">Download</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="docs-hero">
+    <div class="container">
+      <span class="kicker">Download</span>
+      <h1>Get Marlin</h1>
+      <p>The compiler, its standard library and runtime in one package for Linux, macOS and Windows. Free and open source under the MIT license.</p>
+    </div>
+    <div class="mini-fish" data-fish></div>
+  </div>
+
+  <main id="main" class="container downloads-page">
+
+    <!-- ===== Platforms ===== -->
+    <section class="dl-section" aria-labelledby="install-title">
+      <h2 id="install-title">Install with one command</h2>
+      <p class="dl-lead">The installer downloads the latest release for your machine, checks its SHA-256 checksum, puts it in your home folder and adds <code>marlin</code> to your PATH. Run it again to update.</p>
+
+      <div class="dl-grid">
+        <article class="card dl-card" data-os-card="linux">
+          <span class="dl-badge">Your system</span>
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M7 9l3 2.5L7 14M12 14h4M8 21h8M12 17v4"/></svg></div>
+          <h3>Linux</h3>
+          <p>x86-64 and ARM64 · glibc 2.28 or newer (Ubuntu 20.04, Debian 10, RHEL 8, Fedora, Arch …)</p>
+          <div class="code-window">
+            <div class="code-bar"><span class="file">terminal</span><button class="copy" type="button" data-commands>Copy</button></div>
+<pre class="code terminal"><span class="p">$ </span><span class="cmd">curl -fsSL https://github.com/MehmetEminKaymaz/marlin/releases/latest/download/install.sh | sh</span></pre>
+          </div>
+          <p class="dl-need"><strong>You also need</strong> a C compiler: <code>sudo apt install build-essential</code>, <code>sudo dnf install gcc</code> or <code>sudo pacman -S base-devel</code>.</p>
+          <ul class="dl-files">
+            <li><a href="https://github.com/MehmetEminKaymaz/marlin/releases/latest/download/marlin-linux-x86_64.tar.gz">marlin-linux-x86_64.tar.gz</a><span>x86-64</span></li>
+            <li><a href="https://github.com/MehmetEminKaymaz/marlin/releases/latest/download/marlin-linux-arm64.tar.gz">marlin-linux-arm64.tar.gz</a><span>ARM64</span></li>
+          </ul>
+        </article>
+
+        <article class="card dl-card" data-os-card="macos">
+          <span class="dl-badge">Your system</span>
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+          <h3>macOS</h3>
+          <p>Apple silicon and Intel · macOS 11 Big Sur or newer</p>
+          <div class="code-window">
+            <div class="code-bar"><span class="file">terminal</span><button class="copy" type="button" data-commands>Copy</button></div>
+<pre class="code terminal"><span class="p">$ </span><span class="cmd">curl -fsSL https://github.com/MehmetEminKaymaz/marlin/releases/latest/download/install.sh | sh</span></pre>
+          </div>
+          <p class="dl-need"><strong>You also need</strong> the Command Line Tools: <code>xcode-select --install</code>.</p>
+          <ul class="dl-files">
+            <li><a href="https://github.com/MehmetEminKaymaz/marlin/releases/latest/download/marlin-macos-arm64.tar.gz">marlin-macos-arm64.tar.gz</a><span>Apple silicon</span></li>
+            <li><a href="https://github.com/MehmetEminKaymaz/marlin/releases/latest/download/marlin-macos-x86_64.tar.gz">marlin-macos-x86_64.tar.gz</a><span>Intel</span></li>
+          </ul>
+        </article>
+
+        <article class="card dl-card" data-os-card="windows">
+          <span class="dl-badge">Your system</span>
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5.5l7.5-1v7H3zM12.5 4.2L21 3v8.5h-8.5zM3 13.5h7.5v7L3 19.5zM12.5 13.5H21V21l-8.5-1.2z"/></svg></div>
+          <h3>Windows</h3>
+          <p>Windows 10 and 11 · x64</p>
+          <div class="code-window">
+            <div class="code-bar"><span class="file">PowerShell</span><button class="copy" type="button" data-commands>Copy</button></div>
+<pre class="code terminal"><span class="p">PS&gt; </span><span class="cmd">irm https://github.com/MehmetEminKaymaz/marlin/releases/latest/download/install.ps1 | iex</span></pre>
+          </div>
+          <p class="dl-need"><strong>You also need</strong> Visual Studio Build Tools with C++ and Clang. <a href="#windows-tools">One command installs them.</a></p>
+          <ul class="dl-files">
+            <li><a href="https://github.com/MehmetEminKaymaz/marlin/releases/latest/download/marlin-windows-x86_64.zip">marlin-windows-x86_64.zip</a><span>x64</span></li>
+          </ul>
+        </article>
+      </div>
+      <p class="dl-note">Prefer to do it by hand? Download the archive for your system above, unpack it anywhere and add its <code>bin</code> folder to your PATH. On macOS, remove the browser's quarantine flag first: <code>xattr -dr com.apple.quarantine marlin-*</code>.</p>
+    </section>
+
+    <!-- ===== After installing ===== -->
+    <section class="dl-section" aria-labelledby="next-title">
+      <h2 id="next-title">After installing</h2>
+      <div class="dl-two">
+        <div>
+          <ol class="steps">
+            <li>
+              <h4>Open a new terminal</h4>
+              <p>So that the PATH change takes effect.</p>
+            </li>
+            <li>
+              <h4>Check your setup</h4>
+              <p><code>marlin doctor</code> compiles a few small programs and tells you what is missing, with the command to install it.</p>
+            </li>
+            <li>
+              <h4>Write and run</h4>
+              <p>You get a native executable. <a href="docs.html#getting-started">Continue with the guide.</a></p>
+            </li>
+          </ol>
+        </div>
+        <div class="code-window">
+          <div class="code-bar"><span class="lights"><i></i><i></i><i></i></span><span class="file">terminal</span><button class="copy" type="button" data-commands>Copy</button></div>
+<pre class="code terminal"><span class="p">$ </span><span class="cmd">marlin doctor</span>
+
+<span class="c"># hello.marl:  func main() -&gt; void { print("hello, ocean"); }</span>
+<span class="p">$ </span><span class="cmd">marlin hello.marl -O2 -o hello</span>
+<span class="p">$ </span><span class="cmd">./hello</span>
+<span class="o">hello, ocean</span></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Editor ===== -->
+    <section class="dl-section">
+      <div class="cta-band">
+        <div class="mini-fish" data-fish></div>
+        <h2>VS Code extension</h2>
+        <p>Syntax colouring, snippets, live errors from the real compiler and a one-key <strong>Compile &amp; Run</strong>. Install Marlin first; the extension uses the <code>marlin</code> command.</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="https://github.com/MehmetEminKaymaz/marlin/releases/latest/download/marlin-vscode.vsix">Download marlin-vscode.vsix</a>
+          <a class="btn btn-ghost" href="docs.html#editor">How to install it</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Windows tools ===== -->
+    <section class="dl-section" id="windows-tools" aria-labelledby="wt-title">
+      <h2 id="wt-title">Windows: Build Tools with Clang</h2>
+      <p class="dl-lead">Marlin links your programs with Clang and the Microsoft C libraries. If <code>marlin doctor</code> reports that the linker is missing, this installs both (about 3 GB):</p>
+      <div class="code-window">
+        <div class="code-bar"><span class="file">PowerShell</span><button class="copy" type="button" data-commands>Copy</button></div>
+<pre class="code terminal"><span class="p">PS&gt; </span><span class="cmd">winget install Microsoft.VisualStudio.2022.BuildTools --override "--passive --add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Component.VC.Llvm.Clang --includeRecommended"</span></pre>
+      </div>
+      <p class="dl-note">Already have Visual Studio? Add the <em>Desktop development with C++</em> workload and the <em>C++ Clang tools for Windows</em> component in the Visual Studio Installer instead.</p>
+    </section>
+
+    <!-- ===== Update, uninstall, verify ===== -->
+    <section class="dl-section" aria-labelledby="manage-title">
+      <h2 id="manage-title">Update, uninstall, verify</h2>
+      <div class="table-wrap"><table>
+        <thead><tr><th></th><th>Linux / macOS</th><th>Windows (PowerShell)</th></tr></thead>
+        <tbody>
+          <tr><td>Update</td><td>run the install command again</td><td>run the install command again</td></tr>
+          <tr><td>Uninstall</td><td><code>curl -fsSL https://github.com/MehmetEminKaymaz/marlin/releases/latest/download/install.sh | sh -s -- --uninstall</code></td><td><code>$env:MARLIN_UNINSTALL = "1"; irm https://github.com/MehmetEminKaymaz/marlin/releases/latest/download/install.ps1 | iex</code></td></tr>
+          <tr><td>Install a specific version</td><td><code>curl -fsSL …/install.sh | MARLIN_VERSION=0.1.0 sh</code></td><td><code>$env:MARLIN_VERSION = "0.1.0"; irm …/install.ps1 | iex</code></td></tr>
+          <tr><td>Checksum of a download</td><td><code>sha256sum</code> (macOS: <code>shasum -a 256</code>)</td><td><code>Get-FileHash</code></td></tr>
+        </tbody>
+      </table></div>
+      <p class="dl-note">Compare with <a href="https://github.com/MehmetEminKaymaz/marlin/releases/latest/download/SHA256SUMS">SHA256SUMS</a>. Older versions and release notes are on the <a href="https://github.com/MehmetEminKaymaz/marlin/releases">releases page</a>; the source code is on <a href="https://github.com/MehmetEminKaymaz/marlin">GitHub</a>.</p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <a class="brand" href="index.html"><span data-fish="brand"></span>marlin</a>
+      <nav aria-label="Footer">
+        <a href="index.html">Home</a>
+        <a href="docs.html">Documentation</a>
+        <a href="downloads.html">Download</a>
+        <a href="docs.html#getting-started">Getting started</a>
+      </nav>
+      <span>© <span data-year>2026</span> Marlin · a research language built on MLIR</span>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
